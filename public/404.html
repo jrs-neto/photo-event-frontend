@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <script>
+    const path = window.location.pathname;
+    const repo = "/photo-event-frontend";
+
+    if (path.startsWith(repo)) {
+      const route = path.slice(repo.length);
+      window.location.replace(
+        `${repo}/?route=${encodeURIComponent(route)}`
+      );
+    }
+  </script>
+</head>
+
+<body>
+  Redirecionando...
+</body>
+
+</html>

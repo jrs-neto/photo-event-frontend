@@ -6,7 +6,11 @@ import AdminPage from './components/AdminPage';
 export function App() {
   // Verifica se o usuário está tentando acessar a área /admin
   const pathname = window.location.pathname;
-  const isAdminRoute = pathname.startsWith('/admin');
+  const pathFromQuery = new URLSearchParams(window.location.search).get("route");
+
+  const currentPath = pathFromQuery || window.location.pathname;
+
+  const isAdminRoute = currentPath.startsWith("/admin");
 
   // Estado de autenticação do administrador
   const [isAuthenticated, setIsAuthenticated] = useState(
