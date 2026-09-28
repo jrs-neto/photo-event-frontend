@@ -1,0 +1,29 @@
+# Dependências do Node.js
+node_modules/
+
+# Builds e arquivos de saída
+dist/
+build/
+.vite/
+
+# Variáveis de ambiente locais
+.env
+.env.local
+.env.development.local
+.env.production.local
+*.env.local
+
+# Cache de ferramentas de desenvolvimento
+.cache/
+.eslintcache
+
+# Logs do cliente/npm
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+# Arquivos do sistema operacional e IDEs
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
