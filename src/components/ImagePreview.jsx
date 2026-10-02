@@ -6,7 +6,7 @@ export const ImagePreview = ({ previews, onRemove }) => {
   return (
     <div style={{ marginBottom: '1.5rem' }}>
       <p style={{ fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>
-        {previews.length} {previews.length === 1 ? 'foto selecionada' : 'fotos selecionadas'}:
+        {previews.length} {previews.length === 1 ? 'mídia selecionada' : 'mídias selecionadas'}:
       </p>
       <div
         style={{
@@ -27,18 +27,35 @@ export const ImagePreview = ({ previews, onRemove }) => {
               backgroundColor: '#f3f4f6',
             }}
           >
-            <img
-              src={item.url}
-              alt={`Preview ${index + 1}`}
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-              }}
-            />
+            {item.type === 'video' ? (
+              <video
+                src={item.url}
+                muted
+                playsInline
+                preload="metadata"
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                }}
+              />
+            ) : (
+              <img
+                src={item.url}
+                alt={`Preview ${index + 1}`}
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                }}
+              />
+            )}
             <button
               type="button"
               onClick={() => onRemove(index)}
@@ -59,7 +76,7 @@ export const ImagePreview = ({ previews, onRemove }) => {
                 fontSize: '12px',
                 lineHeight: 1,
               }}
-              title="Remover foto"
+              title="Remover mídia"
             >
               ✕
             </button>

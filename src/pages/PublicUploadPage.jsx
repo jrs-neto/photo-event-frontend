@@ -33,6 +33,7 @@ export const PublicUploadPage = () => {
     const newPreviews = newFiles.map((file) => ({
       file,
       url: URL.createObjectURL(file),
+      type: file.type.startsWith('video/') ? 'video' : 'image',
     }));
 
     setSelectedFiles((prev) => [...prev, ...newFiles]);
@@ -56,7 +57,7 @@ export const PublicUploadPage = () => {
     e.preventDefault();
 
     if (selectedFiles.length === 0) {
-      setFeedback({ type: 'error', message: 'Selecione pelo menos uma foto para enviar.' });
+      setFeedback({ type: 'error', message: 'Selecione pelo menos uma foto ou vídeo para enviar.' });
       return;
     }
 
@@ -80,7 +81,7 @@ export const PublicUploadPage = () => {
 
       setFeedback({
         type: 'success',
-        message: 'Suas fotos foram enviadas com sucesso! Obrigado por compartilhar.',
+        message: 'Suas mídias foram enviadas com sucesso! Obrigado por compartilhar.',
       });
 
       // Limpa individualmente as Object URLs após sucesso antes de zerar os estados
@@ -92,7 +93,7 @@ export const PublicUploadPage = () => {
       const errorMessage =
         err.response?.data?.error ||
         err.response?.data?.errors?.[0]?.message ||
-        'Ocorreu um erro ao enviar suas fotos. Tente novamente.';
+        'Ocorreu um erro ao enviar suas mídias. Tente novamente.';
 
       setFeedback({ type: 'error', message: errorMessage });
     } finally {
@@ -111,7 +112,7 @@ export const PublicUploadPage = () => {
     >
       <header style={{ marginBottom: '1.5rem', textAlign: 'center' }}>
         <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold', margin: '0 0 0.5rem 0' }}>
-          📸 Compartilhe Suas Fotos
+          📸 Compartilhe Suas Fotos e Vídeos
         </h1>
         <p style={{ color: '#4b5563', fontSize: '0.875rem', margin: 0 }}>
           Envie os momentos que você registrou durante o evento!
@@ -162,7 +163,7 @@ export const PublicUploadPage = () => {
             cursor: isSubmitting || selectedFiles.length === 0 ? 'not-allowed' : 'pointer',
           }}
         >
-          {isSubmitting ? 'Enviando...' : 'Enviar Fotos'}
+          {isSubmitting ? 'Enviando...' : 'Enviar Mídias'}
         </button>
       </form>
     </div>
