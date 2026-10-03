@@ -111,11 +111,21 @@ export const PublicUploadPage = () => {
       }}
     >
       <header style={{ marginBottom: '1.5rem', textAlign: 'center' }}>
-        <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold', margin: '0 0 0.5rem 0' }}>
-          📸 Compartilhe Suas Fotos e Vídeos
+        <h1
+          style={{
+            fontSize: '1.625rem',
+            fontWeight: '800',
+            margin: '0 0 0.5rem 0',
+            background: 'linear-gradient(135deg, #2563eb 0%, #7c3aed 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            letterSpacing: '-0.025em',
+          }}
+        >
+          Compartilhe seus momentos com a Manu e a Gabi
         </h1>
-        <p style={{ color: '#4b5563', fontSize: '0.875rem', margin: 0 }}>
-          Envie os momentos que você registrou durante o evento!
+        <p style={{ color: '#6b7280', fontSize: '0.875rem', fontWeight: 'bold', margin: 0 }}>
+          Envie os momentos que você registrou durante o evento.
         </p>
       </header>
 
@@ -155,15 +165,16 @@ export const PublicUploadPage = () => {
             width: '100%',
             padding: '0.875rem',
             marginTop: '1rem',
-            backgroundColor: isSubmitting || selectedFiles.length === 0 ? '#9ca3af' : '#16a34a',
+            backgroundColor: isSubmitting || selectedFiles.length === 0 ? '#9ca3af' : '#8b5cf6',
             color: '#ffffff',
             fontWeight: '600',
             border: 'none',
             borderRadius: '0.5rem',
             cursor: isSubmitting || selectedFiles.length === 0 ? 'not-allowed' : 'pointer',
+            transition: 'background-color 0.2s ease',
           }}
         >
-          {isSubmitting ? 'Enviando...' : 'Enviar Mídias'}
+          {isSubmitting ? 'Enviando...' : 'Enviar Fotos/Vídeos'}
         </button>
       </form>
     </div>

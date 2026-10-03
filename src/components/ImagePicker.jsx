@@ -58,7 +58,7 @@ export const ImagePicker = ({ currentFilesCount, onFilesSelected, onError }) => 
           display: 'inline-block',
           width: '100%',
           padding: '0.875rem 1rem',
-          backgroundColor: '#2563eb',
+          backgroundColor: '#8b5cf6',
           color: '#ffffff',
           fontWeight: '600',
           borderRadius: '0.5rem',

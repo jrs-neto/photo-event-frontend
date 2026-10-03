@@ -5,7 +5,7 @@ export const SubmissionForm = ({ formData, onChange, disabled }) => {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1.5rem' }}>
       <div>
         <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.25rem' }}>
-          Nome (Opcional)
+          Nome
         </label>
         <input
           type="text"
@@ -35,7 +35,7 @@ export const SubmissionForm = ({ formData, onChange, disabled }) => {
           value={formData.visitor_group}
           onChange={onChange}
           disabled={disabled}
-          placeholder="Ex: Família dos Noivos / Mesa 04"
+          placeholder="Ex: Família das aniversariantes / Mesa 04"
           maxLength={100}
           style={{
             width: '100%',
@@ -49,14 +49,14 @@ export const SubmissionForm = ({ formData, onChange, disabled }) => {
 
       <div>
         <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.25rem' }}>
-          Mensagem (Opcional)
+          Mensagem
         </label>
         <textarea
           name="message"
           value={formData.message}
           onChange={onChange}
           disabled={disabled}
-          placeholder="Deixe uma mensagem para o evento..."
+          placeholder="Deixe sua mensagem para as aniversariantes..."
           maxLength={500}
           rows={3}
           style={{
