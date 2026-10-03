@@ -1,0 +1,60 @@
+:root {
+  --theme-bg: #ffffff;
+  --theme-text: #111827;
+  --theme-text-secondary: #4b5563;
+  --theme-card: #ffffff;
+  --theme-card-secondary: #f9fafb;
+  --theme-border: #e5e7eb;
+  --theme-input-bg: #ffffff;
+  --theme-input-text: #111827;
+  --theme-button-bg: #ffffff;
+  --theme-button-text: #111827;
+}
+
+:root[data-theme="dark"] {
+  --theme-bg: #111827;
+  --theme-text: #f9fafb;
+  --theme-text-secondary: #d1d5db;
+  --theme-card: #1f2937;
+  --theme-card-secondary: #374151;
+  --theme-border: #4b5563;
+  --theme-input-bg: #1f2937;
+  --theme-input-text: #f9fafb;
+  --theme-button-bg: #1f2937;
+  --theme-button-text: #f9fafb;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  background-color: var(--theme-bg);
+  color: var(--theme-text);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+input,
+textarea,
+select {
+  background-color: var(--theme-input-bg) !important;
+  color: var(--theme-input-text) !important;
+  border-color: var(--theme-border) !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--theme-text-secondary);
+}
+
+button {
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}

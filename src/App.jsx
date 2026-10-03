@@ -1,24 +1,33 @@
-import React, { useState } from 'react';
-import { PublicUploadPage } from './pages/PublicUploadPage';
-import { AdminLogin } from './components/AdminLogin';
-import AdminPage from './components/AdminPage';
+import React, { useState } from "react";
 
-export function App() {
-  // Verifica se o usuário está tentando acessar a área /admin
-  const pathname = window.location.pathname;
-  const pathFromQuery = new URLSearchParams(window.location.search).get("route");
+import { PublicUploadPage } from "./pages/PublicUploadPage";
+import { AdminLogin } from "./components/AdminLogin";
+import AdminPage from "./components/AdminPage";
+import { ThemeProvider } from "./context/ThemeContext";
+import { ThemeToggle } from "./components/ThemeToggle";
 
-  const currentPath = pathFromQuery || window.location.pathname;
+function AppContent() {
+  const BASE_PATH = "/photo-event-frontend";
 
-  const isAdminRoute = currentPath.startsWith("/admin");
+  const routeFromQuery = new URLSearchParams(window.location.search).get(
+    "route"
+  );
 
-  // Estado de autenticação do administrador
+  const pathname = window.location.pathname.startsWith(BASE_PATH)
+    ? window.location.pathname.slice(BASE_PATH.length) || "/"
+    : window.location.pathname;
+
+  const currentPath = routeFromQuery || pathname;
+
+  const isAdminRoute =
+    currentPath === "/admin" || currentPath.startsWith("/admin/");
+
   const [isAuthenticated, setIsAuthenticated] = useState(
-    !!localStorage.getItem('@photo-event:token')
+    !!localStorage.getItem("@photo-event:token")
   );
 
   const handleLogout = () => {
-    localStorage.removeItem('@photo-event:token');
+    localStorage.removeItem("@photo-event:token");
     setIsAuthenticated(false);
   };
 
@@ -26,17 +35,29 @@ export function App() {
     setIsAuthenticated(true);
   };
 
-  // Se a rota for /admin, gerencia a exibição entre Login e Painel
-  if (isAdminRoute) {
-    return isAuthenticated ? (
-      <AdminPage onLogout={handleLogout} />
-    ) : (
-      <AdminLogin onLoginSuccess={handleLoginSuccess} />
-    );
-  }
+  return (
+    <>
+      <ThemeToggle />
 
-  // Qualquer outra rota carrega exclusivamente a página pública original
-  return <PublicUploadPage />;
+      {isAdminRoute ? (
+        isAuthenticated ? (
+          <AdminPage onLogout={handleLogout} />
+        ) : (
+          <AdminLogin onLoginSuccess={handleLoginSuccess} />
+        )
+      ) : (
+        <PublicUploadPage />
+      )}
+    </>
+  );
+}
+
+export function App() {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
+  );
 }
 
 export default App;

@@ -247,6 +247,7 @@ export function AdminPage({ onLogout }) {
           margin: "40px auto",
           padding: "20px",
           fontFamily: "sans-serif",
+          color: "var(--theme-text)",
         }}
       >
         {/* Cabeçalho */}
@@ -256,7 +257,7 @@ export function AdminPage({ onLogout }) {
             justifyContent: "space-between",
             alignItems: "center",
             marginBottom: "24px",
-            borderBottom: "1px solid #eee",
+            borderBottom: "1px solid var(--theme-border)",
             paddingBottom: "16px",
           }}
         >
@@ -269,7 +270,7 @@ export function AdminPage({ onLogout }) {
               <span
                 style={{
                   fontSize: "14px",
-                  color: "#666",
+                  color: "var(--theme-text-secondary)",
                 }}
               >
                 Total de Submissões: {totalSubmissions}
@@ -330,10 +331,10 @@ export function AdminPage({ onLogout }) {
             style={{
               textAlign: "center",
               padding: "40px 0",
-              backgroundColor: "#f9f9f9",
+              backgroundColor: "var(--theme-card-secondary)",
               borderRadius: "8px",
-              border: "1px solid #eee",
-              color: "#666",
+              border: "1px solid var(--theme-border)",
+              color: "var(--theme-text-secondary)",
             }}
           >
             <p>Nenhuma submissão encontrada.</p>
@@ -364,9 +365,9 @@ export function AdminPage({ onLogout }) {
                     key={sub.id}
                     style={{
                       padding: "16px",
-                      border: "1px solid #e0e0e0",
+                      border: "1px solid var(--theme-border)",
                       borderRadius: "8px",
-                      backgroundColor: "#fff",
+                      backgroundColor: "var(--theme-card)",
                       boxShadow: "0 2px 4px rgba(0,0,0,0.02)",
                     }}
                   >
@@ -386,7 +387,7 @@ export function AdminPage({ onLogout }) {
                         <div
                           style={{
                             fontSize: "12px",
-                            color: "#888",
+                            color: "var(--theme-text-secondary)",
                             marginTop: "2px",
                           }}
                         >
@@ -425,7 +426,7 @@ export function AdminPage({ onLogout }) {
                         style={{
                           margin: "0 0 8px 0",
                           fontSize: "14px",
-                          color: "#555",
+                          color: "var(--theme-text-secondary)",
                         }}
                       >
                         <strong>Grupo:</strong>{" "}
@@ -438,8 +439,8 @@ export function AdminPage({ onLogout }) {
                         style={{
                           margin: "0 0 12px 0",
                           fontSize: "14px",
-                          color: "#333",
-                          backgroundColor: "#f8f9fa",
+                          color: "var(--theme-text)",
+                          backgroundColor: "var(--theme-card-secondary)",
                           padding: "8px 12px",
                           borderRadius: "4px",
                           fontStyle: "italic",
@@ -492,8 +493,8 @@ export function AdminPage({ onLogout }) {
                                 flexDirection: "column",
                                 borderRadius: "6px",
                                 overflow: "hidden",
-                                backgroundColor: "#f9f9f9",
-                                border: "1px solid #eee",
+                                backgroundColor: "var(--theme-card-secondary)",
+                                border: "1px solid var(--theme-border)",
                               }}
                             >
                               {/* Área clicável da mídia */}
@@ -520,7 +521,7 @@ export function AdminPage({ onLogout }) {
                                   height: "140px",
                                   padding: 0,
                                   border: "none",
-                                  background: "#f3f4f6",
+                                  background: "var(--theme-card-secondary)",
                                   cursor: "pointer",
                                   overflow: "hidden",
                                   display: "block",
@@ -669,7 +670,7 @@ export function AdminPage({ onLogout }) {
                       <p
                         style={{
                           fontSize: "13px",
-                          color: "#888",
+                          color: "var(--theme-text-secondary)",
                           fontStyle: "italic",
                         }}
                       >
