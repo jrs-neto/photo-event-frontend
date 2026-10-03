@@ -13,8 +13,8 @@ export function AdminPage({ onLogout }) {
   const limit = 20;
 
   // Estados para exclusão
-  const [deletingId, setDeletingId] = useState(null); // Submissão inteira
-  const [deletingPhotoId, setDeletingPhotoId] = useState(null); // Foto individual
+  const [deletingId, setDeletingId] = useState(null);
+  const [deletingPhotoId, setDeletingPhotoId] = useState(null);
 
   const token = localStorage.getItem("@photo-event:token");
 
@@ -34,6 +34,7 @@ export function AdminPage({ onLogout }) {
         });
 
         const resData = response.data;
+
         const list = Array.isArray(resData)
           ? resData
           : resData?.data || resData?.submissions || [];
@@ -49,8 +50,10 @@ export function AdminPage({ onLogout }) {
         }
       } catch (err) {
         console.error("Erro ao carregar submissões:", err);
+
         setError(
-          err.response?.data?.error || "Erro ao carregar a lista de submissões."
+          err.response?.data?.error ||
+          "Erro ao carregar a lista de submissões."
         );
       } finally {
         setLoading(false);
@@ -89,23 +92,30 @@ export function AdminPage({ onLogout }) {
       if (submissions.length === 1 && page > 1) {
         setPage((prev) => prev - 1);
       } else {
-        setSubmissions((prev) => prev.filter((sub) => sub.id !== id));
+        setSubmissions((prev) =>
+          prev.filter((sub) => sub.id !== id)
+        );
       }
 
       setTotalSubmissions((prev) => Math.max(0, prev - 1));
     } catch (err) {
       console.error("Erro ao excluir submissão:", err);
+
       const message =
-        err.response?.data?.error || "Erro ao tentar excluir a submissão.";
+        err.response?.data?.error ||
+        "Erro ao tentar excluir a submissão.";
+
       alert(message);
     } finally {
       setDeletingId(null);
     }
   };
 
-  // Exclusão de foto individual
+  // Exclusão de mídia individual
   const handleDeletePhoto = async (submissionId, photoId) => {
-    const confirmMessage = "Tem certeza que deseja excluir esta foto permanentemente?";
+    const confirmMessage =
+      "Tem certeza que deseja excluir esta mídia permanentemente?";
+
     if (!window.confirm(confirmMessage)) return;
 
     try {
@@ -123,34 +133,56 @@ export function AdminPage({ onLogout }) {
                 : [],
             };
           }
+
           return sub;
         })
       );
     } catch (err) {
-      console.error("Erro ao excluir foto:", err);
+      console.error("Erro ao excluir mídia:", err);
+
       const message =
-        err.response?.data?.error || "Erro ao tentar excluir a foto.";
+        err.response?.data?.error ||
+        "Erro ao tentar excluir a mídia.";
+
       alert(message);
     } finally {
       setDeletingPhotoId(null);
     }
   };
 
-  // Download individual da foto no navegador
-  const handleDownloadPhoto = async (photoUrl, photoId) => {
+  // Download individual da mídia no navegador
+  const handleDownloadPhoto = async (photoUrl, photoId, mediaType) => {
     try {
       const response = await fetch(photoUrl);
 
       if (!response.ok) {
-        throw new Error("Falha ao baixar a foto.");
+        throw new Error("Falha ao baixar a mídia.");
       }
 
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
 
+      let ext = "jpg";
+
+      if (mediaType === "video") {
+        if (blob.type === "video/quicktime") {
+          ext = "mov";
+        } else if (blob.type === "video/webm") {
+          ext = "webm";
+        } else {
+          ext = "mp4";
+        }
+      } else if (blob.type === "image/png") {
+        ext = "png";
+      } else if (blob.type === "image/webp") {
+        ext = "webp";
+      } else if (blob.type === "image/heic") {
+        ext = "heic";
+      }
+
       const link = document.createElement("a");
       link.href = url;
-      link.download = `foto-${photoId}.jpg`;
+      link.download = `midia-${photoId}.${ext}`;
 
       document.body.appendChild(link);
       link.click();
@@ -158,8 +190,8 @@ export function AdminPage({ onLogout }) {
 
       window.URL.revokeObjectURL(url);
     } catch (err) {
-      console.error("Erro ao baixar foto:", err);
-      alert("Não foi possível fazer o download da foto.");
+      console.error("Erro ao baixar mídia:", err);
+      alert("Não foi possível fazer o download da mídia.");
     }
   };
 
@@ -184,13 +216,22 @@ export function AdminPage({ onLogout }) {
         }}
       >
         <div>
-          <h1 style={{ margin: 0, fontSize: "24px" }}>Painel Administrativo</h1>
+          <h1 style={{ margin: 0, fontSize: "24px" }}>
+            Painel Administrativo
+          </h1>
+
           {totalSubmissions > 0 && (
-            <span style={{ fontSize: "14px", color: "#666" }}>
+            <span
+              style={{
+                fontSize: "14px",
+                color: "#666",
+              }}
+            >
               Total de Submissões: {totalSubmissions}
             </span>
           )}
         </div>
+
         {onLogout && (
           <button
             onClick={onLogout}
@@ -211,7 +252,13 @@ export function AdminPage({ onLogout }) {
 
       {/* Estado: Carregando */}
       {loading && (
-        <div style={{ textAlign: "center", padding: "40px 0", color: "#666" }}>
+        <div
+          style={{
+            textAlign: "center",
+            padding: "40px 0",
+            color: "#666",
+          }}
+        >
           <p>Carregando submissões...</p>
         </div>
       )}
@@ -251,12 +298,20 @@ export function AdminPage({ onLogout }) {
       {/* Estado: Lista de Submissões */}
       {!loading && !error && submissions.length > 0 && (
         <>
-          <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "16px",
+            }}
+          >
             {submissions.map((sub) => {
               const photoCount = sub.photos?.length || 0;
+
               const formattedDate = sub.created_at
                 ? new Date(sub.created_at).toLocaleString("pt-BR")
                 : "Data não informada";
+
               const isDeletingSub = deletingId === sub.id;
 
               return (
@@ -282,18 +337,31 @@ export function AdminPage({ onLogout }) {
                       <strong style={{ fontSize: "16px" }}>
                         Nome: {sub.visitor_name || "Anônimo"}
                       </strong>
-                      <div style={{ fontSize: "12px", color: "#888", marginTop: "2px" }}>
+
+                      <div
+                        style={{
+                          fontSize: "12px",
+                          color: "#888",
+                          marginTop: "2px",
+                        }}
+                      >
                         Data: {formattedDate}
                       </div>
                     </div>
 
                     <button
-                      onClick={() => handleDelete(sub.id, sub.visitor_name)}
+                      onClick={() =>
+                        handleDelete(sub.id, sub.visitor_name)
+                      }
                       disabled={isDeletingSub}
                       style={{
                         padding: "6px 12px",
-                        cursor: isDeletingSub ? "not-allowed" : "pointer",
-                        backgroundColor: isDeletingSub ? "#999" : "#dc3545",
+                        cursor: isDeletingSub
+                          ? "not-allowed"
+                          : "pointer",
+                        backgroundColor: isDeletingSub
+                          ? "#999"
+                          : "#dc3545",
                         color: "#fff",
                         border: "none",
                         borderRadius: "4px",
@@ -301,7 +369,9 @@ export function AdminPage({ onLogout }) {
                         fontWeight: "bold",
                       }}
                     >
-                      {isDeletingSub ? "Excluindo..." : "Excluir Submissão Inteira"}
+                      {isDeletingSub
+                        ? "Excluindo..."
+                        : "Excluir Submissão Inteira"}
                     </button>
                   </div>
 
@@ -338,14 +408,17 @@ export function AdminPage({ onLogout }) {
                       fontSize: "13px",
                       fontWeight: "bold",
                       color: "#0070f3",
-                      marginBottom: photoCount > 0 ? "12px" : "0",
+                      marginBottom:
+                        photoCount > 0 ? "12px" : "0",
                     }}
                   >
-                    📷 {photoCount} {photoCount === 1 ? "foto" : "fotos"}
+                    📷 {photoCount}{" "}
+                    {photoCount === 1 ? "mídia" : "mídias"}
                   </div>
 
-                  {/* Grade de Fotos com Ações */}
-                  {Array.isArray(sub.photos) && sub.photos.length > 0 ? (
+                  {/* Grade de Mídias com Ações */}
+                  {Array.isArray(sub.photos) &&
+                    sub.photos.length > 0 ? (
                     <div
                       style={{
                         display: "grid",
@@ -356,7 +429,11 @@ export function AdminPage({ onLogout }) {
                       }}
                     >
                       {sub.photos.map((photo, index) => {
-                        const isDeletingThisPhoto = deletingPhotoId === photo.id;
+                        const isDeletingThisPhoto =
+                          deletingPhotoId === photo.id;
+
+                        const isVideo =
+                          photo.media_type === "video";
 
                         return (
                           <div
@@ -370,26 +447,59 @@ export function AdminPage({ onLogout }) {
                               border: "1px solid #eee",
                             }}
                           >
-                            <div style={{ width: "100%", height: "140px" }}>
-                              <img
-                                src={photo.url || photo.signedUrl}
-                                alt={`Foto enviada por ${sub.visitor_name || "anônimo"
-                                  }`}
-                                style={{
-                                  width: "100%",
-                                  height: "100%",
-                                  objectFit: "cover",
-                                  display: "block",
-                                }}
-                              />
+                            <div
+                              style={{
+                                width: "100%",
+                                height: "140px",
+                              }}
+                            >
+                              {isVideo ? (
+                                <video
+                                  src={
+                                    photo.url || photo.signedUrl
+                                  }
+                                  controls
+                                  muted
+                                  playsInline
+                                  preload="metadata"
+                                  style={{
+                                    width: "100%",
+                                    height: "100%",
+                                    objectFit: "cover",
+                                    display: "block",
+                                  }}
+                                />
+                              ) : (
+                                <img
+                                  src={
+                                    photo.url || photo.signedUrl
+                                  }
+                                  alt={`Mídia enviada por ${sub.visitor_name || "anônimo"
+                                    }`}
+                                  style={{
+                                    width: "100%",
+                                    height: "100%",
+                                    objectFit: "cover",
+                                    display: "block",
+                                  }}
+                                />
+                              )}
                             </div>
-                            <div style={{ display: "flex", width: "100%" }}>
+
+                            <div
+                              style={{
+                                display: "flex",
+                                width: "100%",
+                              }}
+                            >
                               <button
                                 type="button"
                                 onClick={() =>
                                   handleDownloadPhoto(
-                                    photo.url || photo.signedUrl,
-                                    photo.id
+                                    photo.url ||
+                                    photo.signedUrl,
+                                    photo.id,
+                                    photo.media_type
                                   )
                                 }
                                 style={{
@@ -406,9 +516,15 @@ export function AdminPage({ onLogout }) {
                               >
                                 Baixar
                               </button>
+
                               <button
                                 type="button"
-                                onClick={() => handleDeletePhoto(sub.id, photo.id)}
+                                onClick={() =>
+                                  handleDeletePhoto(
+                                    sub.id,
+                                    photo.id
+                                  )
+                                }
                                 disabled={isDeletingThisPhoto}
                                 style={{
                                   flex: 1,
@@ -416,16 +532,19 @@ export function AdminPage({ onLogout }) {
                                   cursor: isDeletingThisPhoto
                                     ? "not-allowed"
                                     : "pointer",
-                                  backgroundColor: isDeletingThisPhoto
-                                    ? "#ccc"
-                                    : "#d32f2f",
+                                  backgroundColor:
+                                    isDeletingThisPhoto
+                                      ? "#ccc"
+                                      : "#d32f2f",
                                   color: "#fff",
                                   border: "none",
                                   fontSize: "12px",
                                   fontWeight: "bold",
                                 }}
                               >
-                                {isDeletingThisPhoto ? "Excluindo..." : "Excluir foto"}
+                                {isDeletingThisPhoto
+                                  ? "Excluindo..."
+                                  : "Excluir mídia"}
                               </button>
                             </div>
                           </div>
@@ -433,8 +552,14 @@ export function AdminPage({ onLogout }) {
                       })}
                     </div>
                   ) : (
-                    <p style={{ fontSize: "13px", color: "#888", fontStyle: "italic" }}>
-                      Nenhuma foto restante nesta submissão.
+                    <p
+                      style={{
+                        fontSize: "13px",
+                        color: "#888",
+                        fontStyle: "italic",
+                      }}
+                    >
+                      Nenhuma mídia restante nesta submissão.
                     </p>
                   )}
                 </div>
@@ -460,8 +585,10 @@ export function AdminPage({ onLogout }) {
                 disabled={page <= 1}
                 style={{
                   padding: "8px 16px",
-                  cursor: page <= 1 ? "not-allowed" : "pointer",
-                  backgroundColor: page <= 1 ? "#ccc" : "#0070f3",
+                  cursor:
+                    page <= 1 ? "not-allowed" : "pointer",
+                  backgroundColor:
+                    page <= 1 ? "#ccc" : "#0070f3",
                   color: "#fff",
                   border: "none",
                   borderRadius: "4px",
@@ -471,7 +598,13 @@ export function AdminPage({ onLogout }) {
                 Anterior
               </button>
 
-              <span style={{ fontSize: "14px", fontWeight: "500", color: "#333" }}>
+              <span
+                style={{
+                  fontSize: "14px",
+                  fontWeight: "500",
+                  color: "#333",
+                }}
+              >
                 Página {page} de {totalPages}
               </span>
 
@@ -480,8 +613,12 @@ export function AdminPage({ onLogout }) {
                 disabled={page >= totalPages}
                 style={{
                   padding: "8px 16px",
-                  cursor: page >= totalPages ? "not-allowed" : "pointer",
-                  backgroundColor: page >= totalPages ? "#ccc" : "#0070f3",
+                  cursor:
+                    page >= totalPages
+                      ? "not-allowed"
+                      : "pointer",
+                  backgroundColor:
+                    page >= totalPages ? "#ccc" : "#0070f3",
                   color: "#fff",
                   border: "none",
                   borderRadius: "4px",
